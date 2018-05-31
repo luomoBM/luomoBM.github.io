@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/blade_soul-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/blade_soul-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svgd?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="AOP简介什么是 AOP面向切面编程, AOP,  Aspect Oriented Program 的首字母缩写。  面向对象（OOP）的特点是把功能分配到不同的对象中， 软件设计中称为指责分配。  假象下，每个对象都可以看做是种个圆柱体，当每个圆柱体都需要做一件有共性事情（加个粉色的圆，突出圆柱）的时候。如果用面向对象的思想，只能每个面都是修改下，而且重复 cv 的修改。 上面问题中有一个大刀，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android-AOP-利器-Javassist">
+<meta property="og:url" content="http://yoursite.com/2018/05/30/Android-AOP-利器-Javassist/index.html">
+<meta property="og:site_name" content="crizquan&#39;s blog">
+<meta property="og:description" content="AOP简介什么是 AOP面向切面编程, AOP,  Aspect Oriented Program 的首字母缩写。  面向对象（OOP）的特点是把功能分配到不同的对象中， 软件设计中称为指责分配。  假象下，每个对象都可以看做是种个圆柱体，当每个圆柱体都需要做一件有共性事情（加个粉色的圆，突出圆柱）的时候。如果用面向对象的思想，只能每个面都是修改下，而且重复 cv 的修改。 上面问题中有一个大刀，">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://p9iqqot9p.bkt.clouddn.com/AOP%E5%AE%9E%E7%8E%B0%E5%9B%BE.jpg">
+<meta property="og:image" content="http://p9iqqot9p.bkt.clouddn.com/%E6%8F%92%E4%BB%B6%E5%BC%80%E5%8F%91%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84.png">
+<meta property="og:image" content="http://p9iqqot9p.bkt.clouddn.com/%E7%94%9F%E6%88%90%E6%8F%92%E4%BB%B6%E7%9B%AE%E5%BD%95.png">
+<meta property="og:image" content="http://p9iqqot9p.bkt.clouddn.com/wechatoa.jpg">
+<meta property="og:updated_time" content="2018-05-31T11:27:23.114Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android-AOP-利器-Javassist">
+<meta name="twitter:description" content="AOP简介什么是 AOP面向切面编程, AOP,  Aspect Oriented Program 的首字母缩写。  面向对象（OOP）的特点是把功能分配到不同的对象中， 软件设计中称为指责分配。  假象下，每个对象都可以看做是种个圆柱体，当每个圆柱体都需要做一件有共性事情（加个粉色的圆，突出圆柱）的时候。如果用面向对象的思想，只能每个面都是修改下，而且重复 cv 的修改。 上面问题中有一个大刀，">
+<meta name="twitter:image" content="http://p9iqqot9p.bkt.clouddn.com/AOP%E5%AE%9E%E7%8E%B0%E5%9B%BE.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/05/30/Android-AOP-利器-Javassist/"/>
+
+
+
+
+
+  <title>Android-AOP-利器-Javassist | crizquan's blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <!-- <style type="text/css">
+	.div_right_bottom {
+	width: 100px;
+	top: 50%;
+	right: 0px;
+	position: fixed;
+	margin-top: -100px;  
+	_position: absolute; 
+	}
+  </style> -->
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!-- <div class="div_right_bottom" align="center">
+  <img src="/images/wechat.jpg"/>
+  个人微信号 
+  </div> -->
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">crizquan's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">crizquan' blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/30/Android-AOP-利器-Javassist/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="crizquan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="crizquan's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android-AOP-利器-Javassist</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-30T17:00:16+08:00">
+                2018-05-30
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-05-31T19:27:23+08:00">
+                2018-05-31
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AOP/" itemprop="url" rel="index">
+                    <span itemprop="name">AOP</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/05/30/Android-AOP-利器-Javassist/" class="leancloud_visitors" data-flag-title="Android-AOP-利器-Javassist">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,906
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  8
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="AOP简介"><a href="#AOP简介" class="headerlink" title="AOP简介"></a>AOP简介</h1><h3 id="什么是-AOP"><a href="#什么是-AOP" class="headerlink" title="什么是 AOP"></a>什么是 AOP</h3><p>面向切面编程, AOP,  Aspect Oriented Program 的首字母缩写。  面向对象（OOP）的特点是把功能分配到不同的对象中， 软件设计中称为指责分配。 </p>
+<p>假象下，每个对象都可以看做是种个圆柱体，当每个圆柱体都需要做一件有共性事情（加个粉色的圆，突出圆柱）的时候。如果用面向对象的思想，只能每个面都是修改下，而且重复 cv 的修改。</p>
+<p>上面问题中有一个大刀， 能一次把所有圆柱切开，一次把所有面都加工好。那么，这个行为就是AOP。可以这么理解，<strong>AOP是OOP的横向补充，把每个原本只有二维的面切开，拉伸出第三维度（Z轴）来</strong>。</p>
+<h3 id="AOP-能干什么"><a href="#AOP-能干什么" class="headerlink" title="AOP 能干什么"></a>AOP 能干什么</h3><p>android 中比较常用的如</p>
+<ul>
+<li>统一添加调用时长统计，日志统计，log输出等</li>
+<li>部分页面是需要验证登录通过才能打开</li>
+<li>统一添加权限申请验证</li>
+<li>按钮防重复点击</li>
+</ul>
+<p>等等诸如此类。</p>
+<h3 id="AOP-如何实现"><a href="#AOP-如何实现" class="headerlink" title="AOP 如何实现"></a>AOP 如何实现</h3><p>传统的实现方式是通过代理模式，这种方式有一定的局限。如果可以通过编译器编译或脚本自动插入代码，这种方式是比较优雅，可拓展性强的。</p>
+<p>这就要介绍下 android 的 AOP 三剑客了。APT、AspectJ、Javassist对应编译时期。</p>
+<a id="more"></a>
+<p><img src="http://p9iqqot9p.bkt.clouddn.com/AOP%E5%AE%9E%E7%8E%B0%E5%9B%BE.jpg" alt="APT,AspectJ,Javassist对应编译时期"></p>
+<p>今天我要讲的就是这个 Javassist 了。在这之前，先给说下 gradle 插件。</p>
+<h1 id="Gradle-插件开发"><a href="#Gradle-插件开发" class="headerlink" title="Gradle 插件开发"></a>Gradle 插件开发</h1><p><code>apply plugin: &#39;com.android.application&#39;</code><br><code>apply plugin: &#39;com.android.library&#39;</code><br>这两行当代相信大家再熟悉不过了。这两个其实也都是 gradle 插件，一个是可运行的 app module ，一个是依赖库。</p>
+<p>这是 gradle 自带的插件，其他也有很多，像我们比较多使用的如 ButterKnife、Lambda 这些常用的也是大牛封装好的在线插件。接下来我们要开发我们自己的插件。</p>
+<p>我们新建一个 <code>plugin</code> module 中 <code>build.gralde</code> 配置一下信息<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">apply plugin: <span class="string">'groovy'</span></span><br><span class="line">apply plugin: <span class="string">'maven'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">dependencies</span> &#123;</span><br><span class="line">    <span class="keyword">compile</span> gradleApi()<span class="comment">//gradle sdk</span></span><br><span class="line">    <span class="keyword">compile</span> localGroovy()<span class="comment">//groovy sdk</span></span><br><span class="line">    <span class="keyword">compile</span> <span class="string">'com.android.tools.build:gradle:3.1.2'</span></span><br><span class="line">    <span class="comment">//compile 'org.javassist:javassist:3.20.0-GA'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">repositories</span> &#123;</span><br><span class="line">    mavenCentral()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">uploadArchives &#123;<span class="comment">//一个task</span></span><br><span class="line">    <span class="keyword">repositories</span>.mavenDeployer &#123;</span><br><span class="line">        repository(url: uri(<span class="string">'../repo'</span>))</span><br><span class="line">        pom.groupId = <span class="string">'com.app.plugin'</span></span><br><span class="line">        pom.artifactId = <span class="string">'gradleplugin'</span></span><br><span class="line">        pom.version = <span class="string">'1.0.0'</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在 <code>main</code>目录下新建一个<code>groovy</code>和<code>resources</code>目录， 这个是固定的格式。如图，上面的<code>groovy</code>下的包名结构可自定义。<br><img src="http://p9iqqot9p.bkt.clouddn.com/%E6%8F%92%E4%BB%B6%E5%BC%80%E5%8F%91%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84.png" alt="gradle 插件开发目录结构"></p>
+<p>plugin 类实现 <code>Plugin&lt;Project&gt;</code>接口<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.app.plugin</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.gradle.api.Plugin</span><br><span class="line"><span class="keyword">import</span> org.gradle.api.Project</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by crizquan on 2018/5/31.</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;</span></span><br><span class="line"><span class="comment"> * desc:</span></span><br><span class="line"><span class="comment"> * */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">JavassistPlugin</span> <span class="keyword">implements</span> <span class="title">Plugin</span>&lt;<span class="title">Project</span>&gt; &#123;</span></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">void</span> apply(Project project) &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>com.app.plugin.javassist.properties</strong>只有一行<br><code>implementation-class=com.app.plugin.JavassistPlugin</code>写上JavassistPlugin 的全路径</p>
+<p>然后执行<code>gradlew -p splugin uploadArchives</code>或者在右边栏找到<code>uploadArchives</code>命令执行。就会生成我们的插件，出现这个就带表我们生成的插件成功了。<strong>每次修改后都要执行这个命令更新插件</strong><br><img src="http://p9iqqot9p.bkt.clouddn.com/%E7%94%9F%E6%88%90%E6%8F%92%E4%BB%B6%E7%9B%AE%E5%BD%95.png" alt="生成插件目录"></p>
+<p><strong>project 的 build.gradle</strong>下需要配置一下插件应用</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">buildscript</span> &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">repositories</span> &#123;</span><br><span class="line">        google()</span><br><span class="line">        jcenter()</span><br><span class="line">        maven&#123;</span><br><span class="line">            url uri(<span class="string">'repo'</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">dependencies</span> &#123;</span><br><span class="line">        <span class="keyword">classpath</span> <span class="string">'com.android.tools.build:gradle:3.1.2'</span></span><br><span class="line">        <span class="keyword">classpath</span> <span class="string">'com.app.plugin:gradleplugin:1.0.0'</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// <span class="doctag">NOTE:</span> Do not place your application dependencies here; they belong</span></span><br><span class="line">        <span class="comment">// in the individual module build.gradle files</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在 module <code>build.gradle</code>中应用下插件，就完成了</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.app.plugin.JavassistPlugin</span><br><span class="line"></span><br><span class="line">apply plugin: <span class="string">'com.android.application'</span></span><br><span class="line">apply plugin: JavassistPlugin</span><br></pre></td></tr></table></figure>
+<h1 id="Javassist-实现事件分发"><a href="#Javassist-实现事件分发" class="headerlink" title="Javassist 实现事件分发"></a>Javassist 实现事件分发</h1><p>类似 EventBus 实现，通过注解的方式， 完成事件分发。因为纵观 EventBus 还是有相当一部分是通过异端分子（反射）来实现的，性能有约束。今天来试试用 Javassist 完美实现 EventBus 事件分发。</p>
+<blockquote>
+<p>写这个是因为目前项目也没有用 EventBus ，是用自己封装的类，用的 <code>Map&lt;IEventHandler&gt;, List&lt;IEventHandler&gt;&gt;</code><br> 三个这样的 Map，-个存 handler 、一个存 handler 的自定义方法、一个存锁引用， 有个好处就是，方法名字参数可以随意定制，不像 EventBus 固定对象传输， 调用又要反射 <code>method.invoke()</code> ，但是这样就比较消耗内存了， 用空间换时间，相对传统方法快一点。调用相对蛋疼，容易写错。 如果大家想了解，<strong>关注公众号</strong>，跟我交流。</p>
+</blockquote>
+<h3 id="相比传统实现有哪些优势"><a href="#相比传统实现有哪些优势" class="headerlink" title="相比传统实现有哪些优势"></a>相比传统实现有哪些优势</h3><ol>
+<li>代码非常简洁。 在<code>Activity</code>或<code>Fragment</code>完全不需要手动调用<code>register</code>和<code>unregister</code>这样的代码。</li>
+<li>高效。 由于 javassist 是在 class 转 dex 的编译期实现的，动态代码插入，完成不涉及反射代码，比 EventBus 优秀。</li>
+<li>不关心线程切换问题。 只需要在注解中传入参数， 实现线程自定切换。</li>
+</ol>
+<h3 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h3><p>事件接收用法跟 EventBus 类似， 注册跟反注册通过注解标记来完成，activity 跟fragment 无需注册反注册。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EventActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> EventInjectTestClass mEventInjectTestClass;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_event);</span><br><span class="line"></span><br><span class="line">        mEventInjectTestClass = <span class="keyword">new</span> EventInjectTestClass();</span><br><span class="line">        mEventInjectTestClass.create(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@EventReceiver</span>(EventTag.ON_TEST_EVENT_ACTIVITY)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">methodEventActivityReceive</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">        Toast.makeText(<span class="keyword">this</span>, str, Toast.LENGTH_SHORT).show();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@EventReceiver</span>(EventTag.ON_TEST_EVENT_NORMAL_CLASS)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">methodEventNormalClassReceive</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">        Toast.makeText(<span class="keyword">this</span>, str, Toast.LENGTH_SHORT).show();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClickActivityEvent</span><span class="params">(View view)</span> </span>&#123;</span><br><span class="line">        EventCenterV2.getInstance().onEvent(EventTag.ON_TEST_EVENT_ACTIVITY, <span class="string">"来自activity事件对象"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClickNormalClassEvent</span><span class="params">(View view)</span> </span>&#123;</span><br><span class="line">        EventCenterV2.getInstance().onEvent(EventTag.ON_TEST_EVENT_NORMAL_CLASS, <span class="string">"来自normalclass事件对象"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDestroy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onDestroy();</span><br><span class="line">        mEventInjectTestClass.destroy();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EventInjectTestClass</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Context mContext;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@EventRegister</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">create</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        mContext = context;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@EventUnRegister</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">destroy</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@EventReceiver</span>(EventTag.ON_TEST_EVENT_ACTIVITY, thread = EventReceiver.MAIN)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">methodEventReceiveClass</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">        Toast.makeText(mContext, str, Toast.LENGTH_SHORT).show();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>首先需要 plugin module 引入 dependencies <code>compile &#39;org.javassist:javassist:3.20.0-GA&#39;</code>来支持 javassist</p>
+<p>以下是插件<strong>核心代码</strong>，原理就是插入代码，说白了就是字符串拼接。groovy的语法也非常简单，<strong>完全兼容 Java</strong><br> 有一点我想吐槽，他的语法跟 kotlin 相似，但是有没有模仿到位，就是 groovy 不支持传入被调用方法少于他需要的参数，kotlin 可以。我觉得可以优化下。</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">ClassPool pool = ClassPool.getDefault();</span><br><span class="line">pool.insertClassPath(filePath) <span class="comment">//引入当前类路径</span></span><br><span class="line"><span class="comment">//引入 android jar包 否则找不到相关类</span></span><br><span class="line">pool.insertClassPath(project.android.bootClasspath[<span class="number">0</span>].toString())</span><br><span class="line">CtClass cc = pool.get(<span class="string">"EventCenterV2"</span>);</span><br><span class="line">cc.getDeclaredMethods() <span class="comment">//获取 class 的所有方法</span></span><br><span class="line">ctMethod.getAnnotations <span class="comment">//获取 方法的所有注解</span></span><br><span class="line">ctMethod.insertAfter(injectSentence) <span class="comment">//方法内部插入代码</span></span><br><span class="line"></span><br><span class="line">CtMethod mInitEventMethod = CtNewMethod.make(methodStr, cc )</span><br><span class="line">info.getCtClz().addMethod(mInitEventMethod)  <span class="comment">// class 插入方法</span></span><br><span class="line"></span><br><span class="line">cc.writeFile();<span class="comment">//将内存的代码输出，调用了这个函数才真正修改了class</span></span><br></pre></td></tr></table></figure>
+<p>具体实现代码，大家可以去我的github查看 <strong><a href="https://github.com/luomoBM/AopTest" target="_blank" rel="noopener">https://github.com/luomoBM/AopTest</a></strong><br>这个单独抽取出来当个 <strong>事件分发库</strong> 使用</p>
+<blockquote>
+<p>目前事件通知接收方法只支持少于等于一个参数，如果需要支持多个参数可自行修改。</p>
+</blockquote>
+<p>Javassist 还有很多 api 用法， 项目中没用到，如果大家感兴趣的话可以去 <strong><a href="https://jboss-javassist.github.io/javassist/tutorial/tutorial.html" target="_blank" rel="noopener">https://jboss-javassist.github.io/javassist/tutorial/tutorial.html</a></strong> 看看里面的文档，挺详细的，可以用 Google 翻译配合查看，别告诉我你不会科学上网。。</p>
+<p>这里还有个 Gradle 脚本的 Api 文档 对于 Gradle 插件编写有帮助。<strong><a href="http://google.github.io/android-gradle-dsl/javadoc/current/" target="_blank" rel="noopener">http://google.github.io/android-gradle-dsl/javadoc/current/</a></strong></p>
+<p><strong>希望这个文章对大家有帮助，并且记录自己的成长，共勉。</strong></p>
+<p>如果文章对你有帮助，大家可以赞赏支持鼓励下作者。<br> 有什么疑问可以关注下方我的公众号， 留言就行。<br> <img src="http://p9iqqot9p.bkt.clouddn.com/wechatoa.jpg" alt="我的个人公众号"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/wechatoa.jpg" alt="crizquan wechat" style="width: 200px; max-width: 100%;"/>
+    <div>喜欢我的文章, 欢迎关注我的公众号.</div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>赞赏是一种支持与鼓励!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.png" alt="crizquan 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    crizquan
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yoursite.com/2018/05/30/Android-AOP-利器-Javassist/" title="Android-AOP-利器-Javassist">http://yoursite.com/2018/05/30/Android-AOP-利器-Javassist/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="crizquan" />
+            
+              <p class="site-author-name" itemprop="name">crizquan</p>
+              <p class="site-description motion-element" itemprop="description">Just do it!!</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+	    </br>
+	    <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=553543103&auto=0&height=66"></iframe>
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#AOP简介"><span class="nav-number">1.</span> <span class="nav-text">AOP简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是-AOP"><span class="nav-number">1.0.1.</span> <span class="nav-text">什么是 AOP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AOP-能干什么"><span class="nav-number">1.0.2.</span> <span class="nav-text">AOP 能干什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AOP-如何实现"><span class="nav-number">1.0.3.</span> <span class="nav-text">AOP 如何实现</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Gradle-插件开发"><span class="nav-number">2.</span> <span class="nav-text">Gradle 插件开发</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Javassist-实现事件分发"><span class="nav-number">3.</span> <span class="nav-text">Javassist 实现事件分发</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#相比传统实现有哪些优势"><span class="nav-number">3.0.1.</span> <span class="nav-text">相比传统实现有哪些优势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用法"><span class="nav-number">3.0.2.</span> <span class="nav-text">用法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现"><span class="nav-number">3.1.</span> <span class="nav-text">实现</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">crizquan</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("1BKEgEkCqLptQBFsHIzDygvJ-gzGzoHsz", "nAG4sEgdKalfEFwgnt1YDi5Y");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
