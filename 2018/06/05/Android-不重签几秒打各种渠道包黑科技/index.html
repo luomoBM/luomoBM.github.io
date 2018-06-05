@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/blade_soul-32x32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/blade_soul-16x16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svgd?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言我们app经常有这样的需求，就是app经常需要投放到不同渠道。这就需要我们给每个app包中添加一些渠道信息，用数据分析统计、业务功能需求等等。 传统打入渠道信息的弊端有几种打渠道包信息的方法，如  利用 Android Studio 自带 productFlavors 方式，配合第三方平台打包，自动打出一堆渠道包。 解压拆包，放入渠道信息。  这几种打包方式都有一个共同缺点，重签名，这样在每个">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android 不重签几秒打各种渠道包黑科技">
+<meta property="og:url" content="http://yoursite.com/2018/06/05/Android-不重签几秒打各种渠道包黑科技/index.html">
+<meta property="og:site_name" content="crizquan&#39;s blog">
+<meta property="og:description" content="前言我们app经常有这样的需求，就是app经常需要投放到不同渠道。这就需要我们给每个app包中添加一些渠道信息，用数据分析统计、业务功能需求等等。 传统打入渠道信息的弊端有几种打渠道包信息的方法，如  利用 Android Studio 自带 productFlavors 方式，配合第三方平台打包，自动打出一堆渠道包。 解压拆包，放入渠道信息。  这几种打包方式都有一个共同缺点，重签名，这样在每个">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://p9iqqot9p.bkt.clouddn.com/%E6%B8%A0%E9%81%93%E5%8C%85%E5%B0%BE%E4%BF%A1%E6%81%AF.png">
+<meta property="og:image" content="http://p9iqqot9p.bkt.clouddn.com/wechatoa.jpg">
+<meta property="og:updated_time" content="2018-06-05T04:35:23.701Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android 不重签几秒打各种渠道包黑科技">
+<meta name="twitter:description" content="前言我们app经常有这样的需求，就是app经常需要投放到不同渠道。这就需要我们给每个app包中添加一些渠道信息，用数据分析统计、业务功能需求等等。 传统打入渠道信息的弊端有几种打渠道包信息的方法，如  利用 Android Studio 自带 productFlavors 方式，配合第三方平台打包，自动打出一堆渠道包。 解压拆包，放入渠道信息。  这几种打包方式都有一个共同缺点，重签名，这样在每个">
+<meta name="twitter:image" content="http://p9iqqot9p.bkt.clouddn.com/%E6%B8%A0%E9%81%93%E5%8C%85%E5%B0%BE%E4%BF%A1%E6%81%AF.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/06/05/Android-不重签几秒打各种渠道包黑科技/"/>
+
+
+
+
+
+  <title>Android 不重签几秒打各种渠道包黑科技 | crizquan's blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <!-- <style type="text/css">
+	.div_right_bottom {
+	width: 100px;
+	top: 50%;
+	right: 0px;
+	position: fixed;
+	margin-top: -100px;  
+	_position: absolute; 
+	}
+  </style> -->
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!-- <div class="div_right_bottom" align="center">
+  <img src="/images/wechat.jpg"/>
+  个人微信号 
+  </div> -->
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">crizquan's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">crizquan' blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/05/Android-不重签几秒打各种渠道包黑科技/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="crizquan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="crizquan's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android 不重签几秒打各种渠道包黑科技</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-05T12:27:03+08:00">
+                2018-06-05
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-06-05T12:35:23+08:00">
+                2018-06-05
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/渠道包/" itemprop="url" rel="index">
+                    <span itemprop="name">渠道包</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/06/05/Android-不重签几秒打各种渠道包黑科技/" class="leancloud_visitors" data-flag-title="Android 不重签几秒打各种渠道包黑科技">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,520
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  7
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>我们app经常有这样的需求，就是app经常需要投放到不同渠道。这就需要我们给每个app包中添加一些渠道信息，用数据分析统计、业务功能需求等等。</p>
+<h4 id="传统打入渠道信息的弊端"><a href="#传统打入渠道信息的弊端" class="headerlink" title="传统打入渠道信息的弊端"></a>传统打入渠道信息的弊端</h4><p>有几种打渠道包信息的方法，如</p>
+<ul>
+<li>利用 Android Studio 自带 productFlavors 方式，配合第三方平台打包，自动打出一堆渠道包。</li>
+<li>解压拆包，放入渠道信息。</li>
+</ul>
+<p>这几种打包方式都有一个共同缺点，<strong>重签名</strong>，这样在每个渠道打包生成的效率上大打折扣。想象下如果遇到即时的生成，下载包这样的业务场景，肯定是实现不了的。</p>
+<h3 id="秒速打出渠道包"><a href="#秒速打出渠道包" class="headerlink" title="秒速打出渠道包"></a>秒速打出渠道包</h3><a id="more"></a>
+<p>由于项目业务原因，事实上我们需要打的渠道包的量是非常大的，几百上千都有，且这些渠道包可能需要即时生成下载。那上面的打包方式明显满足不了我们的需求。</p>
+<h4 id="V1-签名方式打包"><a href="#V1-签名方式打包" class="headerlink" title="V1 签名方式打包"></a>V1 签名方式打包</h4><p>这种方式明显契合需求，有什么优势</p>
+<ul>
+<li>快速打包，只做在包尾写入渠道信息操作。</li>
+<li>不需要重签名。</li>
+</ul>
+<p>我们的秒速读取渠道信息就是由<strong>V1签名方式实现</strong>的，因此需要在 <code>gradle</code> 文件 <code>signingConfigs</code>  禁用V2签名方式 <code>v2SigningEnabled false</code> </p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">signingConfigs &#123;</span><br><span class="line">        debug &#123;</span><br><span class="line">            v2SigningEnabled <span class="keyword">false</span></span><br><span class="line">        &#125;</span><br><span class="line">        release &#123;</span><br><span class="line">            v2SigningEnabled <span class="keyword">false</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h5 id="写入渠道信息"><a href="#写入渠道信息" class="headerlink" title="写入渠道信息"></a>写入渠道信息</h5><p>写入渠道信息具体步骤如下：</p>
+<ol>
+<li>复制 <code>apk</code></li>
+<li>找到 <code>eocd</code> 数据块</li>
+<li>添加渠道信息</li>
+<li>添加渠道信息长度</li>
+<li>添加魔数</li>
+</ol>
+<p>下面以 <code>go</code> 代码为例</p>
+<blockquote>
+<p>这里说明下，<code>go</code> 里面 <code>binary.LittleEndian.PutUint()</code> 是反序列化输入，写入的字节是反过来的。<br>由于我的apk包本身没有注释， <code>eocd</code> 的长度是 <code>22</code> 字节</p>
+</blockquote>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span>  <span class="params">(c *Controller)</span> <span class="title">writeChannelInfo</span><span class="params">(pkgFilePath <span class="keyword">string</span>)</span></span> &#123;</span><br><span class="line">	<span class="comment">// 找eocd开始位置</span></span><br><span class="line">	_, err1 = pkgFile.Seek(<span class="number">-22</span>, os.SEEK_END)</span><br><span class="line">	<span class="keyword">if</span> err1 != <span class="literal">nil</span> &#123;</span><br><span class="line">		c.logger.Errorln(<span class="string">"Seek error"</span>, err1)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	eocdMagicBuff := <span class="built_in">make</span>([]<span class="keyword">byte</span>, <span class="number">4</span>)</span><br><span class="line">	_, err1 = pkgFile.Read(eocdMagicBuff)</span><br><span class="line">	<span class="keyword">if</span> err1 != <span class="literal">nil</span> &#123;</span><br><span class="line">		c.logger.Errorln(<span class="string">"Read error"</span>, err1)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//0x06054b50 eocd 的开始 4 个字节的反序</span></span><br><span class="line">	<span class="keyword">if</span> binary.LittleEndian.Uint32(eocdMagicBuff) != <span class="keyword">uint32</span>(<span class="number">0x06054b50</span>) &#123;</span><br><span class="line">		c.logger.Errorln(<span class="string">"eocd magic error"</span>)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	pkgFile, err1 = os.OpenFile(pkgFilePath, os.O_RDWR, <span class="number">0644</span>)</span><br><span class="line">	commentMagic := <span class="keyword">uint32</span>(<span class="number">0xeadf</span>03c8)</span><br><span class="line">	<span class="comment">// comment总长度=json数据长度+json数据长度位长度(2)+魔术数长度(4)</span></span><br><span class="line">	totalLen := <span class="built_in">len</span>(jsonData) + <span class="number">2</span> + <span class="number">4</span></span><br><span class="line">	fmt.Println(<span class="string">"total len"</span>, totalLen)</span><br><span class="line">	totalLenBuff := <span class="built_in">make</span>([]<span class="keyword">byte</span>, <span class="number">2</span>)</span><br><span class="line">	binary.LittleEndian.PutUint16(totalLenBuff, <span class="keyword">uint16</span>(totalLen))</span><br><span class="line">	jsonLenBuff := <span class="built_in">make</span>([]<span class="keyword">byte</span>, <span class="number">2</span>)</span><br><span class="line">	binary.LittleEndian.PutUint16(jsonLenBuff, <span class="keyword">uint16</span>(<span class="built_in">len</span>(jsonData)))</span><br><span class="line">	magicBuff := <span class="built_in">make</span>([]<span class="keyword">byte</span>, <span class="number">4</span>)</span><br><span class="line">	binary.LittleEndian.PutUint32(magicBuff, commentMagic)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 从comment长度位置开始写</span></span><br><span class="line">	_, err1 = pkgFile.Seek(<span class="number">-2</span>, os.SEEK_END)</span><br><span class="line">	<span class="keyword">if</span> err1 != <span class="literal">nil</span> &#123;</span><br><span class="line">		c.logger.Errorln(<span class="string">"Seek error"</span>, err1)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 写入comment总长度</span></span><br><span class="line">	_, err1 = pkgFile.Write(totalLenBuff)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		c.logger.Errorln(<span class="string">"Write error"</span>, err1)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 写入json数据</span></span><br><span class="line">	_, err1 = pkgFile.Write(jsonData)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		c.logger.Errorln(<span class="string">"Write error"</span>, err1)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 写入json长度数据</span></span><br><span class="line">	_, err1 = pkgFile.Write(jsonLenBuff)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		c.logger.Errorln(<span class="string">"Write error"</span>, err1)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 写入magic number</span></span><br><span class="line">	_, err1 = pkgFile.Write(magicBuff)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		c.logger.Errorln(<span class="string">"Write error"</span>, err1)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	pkgFile.Close()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="读取渠道信息"><a href="#读取渠道信息" class="headerlink" title="读取渠道信息"></a>读取渠道信息</h5><p>实际就是在 Apk 文件的注释字段里，添加我们自己的渠道信息，绕过了重签名。读取步骤如下</p>
+<ol>
+<li>定位到魔数</li>
+<li>向前读两个字节，并确定渠道信息长度 len</li>
+<li>继续向前读 len 个字节，读取len 长度信息，就是渠道信息了</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">V1SchemeUtil</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> String CONTENT_CHARSET = <span class="string">"UTF-8"</span>;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> SHORT_LENGTH = <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">byte</span>[] V1_MAGIC = ByteUtils.hexStringToBytes(<span class="string">"C803DFEA"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * read channel from apk</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> file Apk file path</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">readChannel</span><span class="params">(File file)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        RandomAccessFile raf = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            raf = <span class="keyword">new</span> RandomAccessFile(file, <span class="string">"r"</span>);</span><br><span class="line">            <span class="keyword">long</span> index = raf.length();</span><br><span class="line">            <span class="keyword">byte</span>[] buffer = <span class="keyword">new</span> <span class="keyword">byte</span>[V1_MAGIC.length];</span><br><span class="line">            index -= V1_MAGIC.length;</span><br><span class="line">            raf.seek(index);</span><br><span class="line">            raf.readFully(buffer);</span><br><span class="line">            <span class="comment">// whether magic bytes matched</span></span><br><span class="line">            <span class="keyword">if</span> (isV1MagicMatch(buffer)) &#123;</span><br><span class="line">                index -= SHORT_LENGTH;</span><br><span class="line">                raf.seek(index);</span><br><span class="line">                <span class="comment">// read channel length field</span></span><br><span class="line">                <span class="keyword">int</span> length = readShort(raf);</span><br><span class="line">                <span class="keyword">if</span> (length &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                    index -= length;</span><br><span class="line">                    raf.seek(index);</span><br><span class="line">                    <span class="comment">// read channel bytes</span></span><br><span class="line">                    <span class="keyword">byte</span>[] bytesComment = <span class="keyword">new</span> <span class="keyword">byte</span>[length];</span><br><span class="line">                    raf.readFully(bytesComment);</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">new</span> String(bytesComment, CONTENT_CHARSET);</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"zip channel info not found"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"zip v1 magic not found"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (raf != <span class="keyword">null</span>) &#123;</span><br><span class="line">                raf.close();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">short</span> <span class="title">readShort</span><span class="params">(DataInput input)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="keyword">byte</span>[] buf = <span class="keyword">new</span> <span class="keyword">byte</span>[SHORT_LENGTH];</span><br><span class="line">        input.readFully(buf);</span><br><span class="line">        ByteBuffer bb = ByteBuffer.wrap(buf).order(ByteOrder.LITTLE_ENDIAN);</span><br><span class="line">        <span class="keyword">return</span> bb.getShort(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * check v1 magic</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> buffer</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">isV1MagicMatch</span><span class="params">(<span class="keyword">byte</span>[] buffer)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (buffer.length != V1_MAGIC.length) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; V1_MAGIC.length; ++i) &#123;</span><br><span class="line">            <span class="keyword">if</span> (buffer[i] != V1_MAGIC[i]) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样就完成了读取渠道信息</p>
+<h5 id="具体生成渠道信息包的后apk尾部信息"><a href="#具体生成渠道信息包的后apk尾部信息" class="headerlink" title="具体生成渠道信息包的后apk尾部信息"></a>具体生成渠道信息包的后apk尾部信息</h5><p>大家可以下载个16进制查看器，查看包尾信息</p>
+<blockquote>
+<p>这里提供个分享链接给大家下载，windows系统的 exe 文件。<a href="https://pan.baidu.com/s/1RzV5F-wtzl9SqO4AjAoUFg" target="_blank" rel="noopener">https://pan.baidu.com/s/1RzV5F-wtzl9SqO4AjAoUFg</a></p>
+</blockquote>
+<p><img src="http://p9iqqot9p.bkt.clouddn.com/%E6%B8%A0%E9%81%93%E5%8C%85%E5%B0%BE%E4%BF%A1%E6%81%AF.png" alt="enter image description here"></p>
+<p>最后4个字节是我们自己定义的魔数。 </p>
+<h3 id="这种打包方式的一些缺点。"><a href="#这种打包方式的一些缺点。" class="headerlink" title="这种打包方式的一些缺点。"></a>这种打包方式的一些缺点。</h3><p>首先这是基于 V1 打包方式的，并不支持 V2.<br>使用这种方式打包，在 apk 安装耗时相比优化过更严格的 V2 打包方式 2倍以上</p>
+<p>但我们app 非常小， 所以这些缺点并不明显。所以我们采用了这种相对简单，快速的打包方式。</p>
+<p>其实我们需要做的是，根据自己实际项目需求，找到合适的渠道打包方式，这是我要给大家的思考。</p>
+<h3 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h3><p>以上就是我们项目实际运用的生成渠道信息的方式。</p>
+<p>我发现前人早已造好了轮子了， 并且支持 V1 和 V2 打包方式，有兴趣可以去看下 <a href="https://github.com/mcxiaoke/packer-ng-plugin" target="_blank" rel="noopener">https://github.com/mcxiaoke/packer-ng-plugin</a></p>
+<h3 id="关于作者"><a href="#关于作者" class="headerlink" title="关于作者"></a>关于作者</h3><p>如果文章对你有帮助，大家可以赞赏支持鼓励下作者。<br>有什么疑问、错误都可以关注下方我的公众号留言。<br>这是我的个人博客 <a href="http://crizquan.top/" target="_blank" rel="noopener">http://crizquan.top</a><br>这是我的 GitHub 地址 <a href="https://github.com/luomoBM" target="_blank" rel="noopener">https://github.com/luomoBM</a><br><img src="http://p9iqqot9p.bkt.clouddn.com/wechatoa.jpg" alt="我的个人公众号"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/wechatoa.jpg" alt="crizquan wechat" style="width: 200px; max-width: 100%;"/>
+    <div>喜欢我的文章, 欢迎关注我的公众号.</div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>赞赏是一种支持与鼓励!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.png" alt="crizquan 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    crizquan
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yoursite.com/2018/06/05/Android-不重签几秒打各种渠道包黑科技/" title="Android 不重签几秒打各种渠道包黑科技">http://yoursite.com/2018/06/05/Android-不重签几秒打各种渠道包黑科技/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/30/Android-AOP-利器-Javassist/" rel="next" title="Android-AOP-利器-Javassist">
+                <i class="fa fa-chevron-left"></i> Android-AOP-利器-Javassist
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="crizquan" />
+            
+              <p class="site-author-name" itemprop="name">crizquan</p>
+              <p class="site-description motion-element" itemprop="description">Just do it!!</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+	    </br>
+	    <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=553543103&auto=0&height=66"></iframe>
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#传统打入渠道信息的弊端"><span class="nav-number">1.1.</span> <span class="nav-text">传统打入渠道信息的弊端</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#秒速打出渠道包"><span class="nav-number">2.</span> <span class="nav-text">秒速打出渠道包</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#V1-签名方式打包"><span class="nav-number">2.1.</span> <span class="nav-text">V1 签名方式打包</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#写入渠道信息"><span class="nav-number">2.1.1.</span> <span class="nav-text">写入渠道信息</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#读取渠道信息"><span class="nav-number">2.1.2.</span> <span class="nav-text">读取渠道信息</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#具体生成渠道信息包的后apk尾部信息"><span class="nav-number">2.1.3.</span> <span class="nav-text">具体生成渠道信息包的后apk尾部信息</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#这种打包方式的一些缺点。"><span class="nav-number">3.</span> <span class="nav-text">这种打包方式的一些缺点。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最后"><span class="nav-number">4.</span> <span class="nav-text">最后</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于作者"><span class="nav-number">5.</span> <span class="nav-text">关于作者</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">crizquan</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("1BKEgEkCqLptQBFsHIzDygvJ-gzGzoHsz", "nAG4sEgdKalfEFwgnt1YDi5Y");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
