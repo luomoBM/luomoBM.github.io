@@ -3,17 +3,17 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: crizquan's blog
-subtitle: crizquan' blog
+title: Crizquan's blog
+subtitle: E-mail wanderbm@163.com
 description: Just do it!!
 keywords:
-author: crizquan
+author: Crizquan
 language: zh-Hans
 timezone: 
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://yoursite.com
+url: http://Crizquan.coding.me/
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -77,7 +77,10 @@ theme: next
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
+##repo: git@github.com:luomoBM/luomoBM.github.io.git
 deploy: 
   type: git
-  repo: git@github.com:luomoBM/luomoBM.github.io.git
-branch: master
+  repository:
+    github: git@github.com:luomoBM/luomoBM.github.io.git
+    coding: git@git.coding.net:Crizquan/Crizquan.git
+  branch: master
