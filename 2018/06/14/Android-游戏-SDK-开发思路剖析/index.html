@@ -88,7 +88,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://p9iqqot9p.bkt.clouddn.com/android%E6%B8%B8%E6%88%8Fsdk%E6%94%AF%E4%BB%98%E6%B5%81%E7%A8%8B.png">
 <meta property="og:image" content="http://p9iqqot9p.bkt.clouddn.com/wechatoa.jpg">
-<meta property="og:updated_time" content="2018-06-15T01:41:20.364Z">
+<meta property="og:updated_time" content="2018-06-15T02:44:24.528Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android 游戏 SDK 开发思路剖析">
 <meta name="twitter:description" content="前言Android 游戏 SDK 开发一直是大家比较陌生的领域，网上又没有比较好的全面的、系统的教程，但又是互联网公司比较缺人的岗位。那么我今天就来系统性地来说说 Android 游戏 SDK 究竟应该怎样来开发。 Android 游戏渠道 SDK 简介SDK 翻译过来就是开发工具包的意思。既然是工具包，那他内部的细节肯定是不对外部开放的，它所有的功能都以外部接口的形式提供外部调用，使其使用起来非">
@@ -296,7 +296,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-06-15T09:41:20+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2018-06-15T10:44:24+08:00">
                 2018-06-15
               </time>
             
@@ -357,7 +357,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,161
+                  1,157
                 </span>
               
 
@@ -394,26 +394,29 @@
       
 
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Android 游戏 SDK 开发一直是大家比较陌生的领域，网上又没有比较好的全面的、系统的教程，但又是互联网公司比较缺人的岗位。那么我今天就来系统性地来说说 Android 游戏 SDK 究竟应该怎样来开发。</p>
-<h2 id="Android-游戏渠道-SDK-简介"><a href="#Android-游戏渠道-SDK-简介" class="headerlink" title="Android 游戏渠道 SDK 简介"></a>Android 游戏渠道 SDK 简介</h2><p>SDK 翻译过来就是<strong>开发工具包</strong>的意思。既然是工具包，那他内部的细节肯定是不对外部开放的，它所有的功能都以外部接口的形式提供外部调用，使其使用起来非常方便。</p>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>Android 游戏 SDK 开发一直是大家比较陌生的领域，网上又没有比较好的全面的、系统的教程，但又是互联网公司比较缺人的岗位。那么我今天就来系统性地来说说 Android 游戏 SDK 究竟应该怎样来开发。</p>
+<h1 id="Android-游戏渠道-SDK-简介"><a href="#Android-游戏渠道-SDK-简介" class="headerlink" title="Android 游戏渠道 SDK 简介"></a>Android 游戏渠道 SDK 简介</h1><p>SDK 翻译过来就是<strong>开发工具包</strong>的意思。既然是工具包，那他内部的细节肯定是不对外部开放的，它所有的功能都以外部接口的形式提供外部调用，使其使用起来非常方便。</p>
 <a id="more"></a>
-<p><strong>游戏渠道</strong>是个什么意思？ Android 平台下游戏开发商需要推广自己的游戏，但近他们自己推广估计够呛（毕竟他们只是专业研发游戏的），要怎么做呢？他们通常会把自己的游戏分发到各个平台下，让平台也参与推广发行，这些平台对于游戏开发商来说，就是一个一个的渠道。当然除了某大厂，不用渠道分发他们的游戏，也能很好推广，根本不用跟渠道分成。</p>
+<p><strong>游戏渠道</strong>是个什么意思？ Android 平台下游戏开发商需要推广自己的游戏，但近他们自己推广估计够呛（毕竟他们只是专业研发游戏的），要怎么做呢？</p>
+<p>他们通常会把自己的游戏分发到各个平台下，让平台也参与推广发行，这些平台对于游戏开发商来说，就是一个一个的渠道。当然除了某大厂，不用渠道分发他们的游戏，也能很好推广，根本不用跟渠道分成。</p>
 <p>这里解释下各个名词：</p>
 <ul>
 <li><strong>CP</strong>  既然我们是开发渠道 SDK 的，那 <strong>CP 就是代指游戏开发商</strong>。</li>
-<li><strong>聚合</strong> 游戏渠道其实有很多，那让 CP 一个一个去对接 SDK 也够呛，这就诞生了中间环“聚合”。其实就是类似于电脑驱动的作用，并不影响 SDK 的交互。CP 只需要去对接几个聚合，由聚合来分别对接各个渠道，专业的人干专业的事。</li>
+<li><strong>聚合</strong> 游戏渠道其实有很多，那让 CP 一个一个去对接 SDK 也够呛，这就诞生了中间环“聚合”（类似于电脑驱动的作用，并不影响 SDK 的交互）。CP 只需要去对接几个聚合，由聚合来分别对接各个渠道，专业的人干专业的事。</li>
 <li><strong>母包</strong> CP 开发的游戏 APK 包，渠道没有处理过的，成为母包。</li>
 </ul>
-<h2 id="渠道-SDK-开发"><a href="#渠道-SDK-开发" class="headerlink" title="渠道 SDK 开发"></a>渠道 SDK 开发</h2><p>Android 渠道 SDK 必须要具备几个功能，当然也许要定制对应功能的 UI</p>
+<h1 id="渠道-SDK-开发"><a href="#渠道-SDK-开发" class="headerlink" title="渠道 SDK 开发"></a>渠道 SDK 开发</h1><p>Android 渠道 SDK 必须要具备几个功能，当然也许要定制对应功能的 UI</p>
 <ul>
 <li>注册</li>
 <li>登录</li>
 <li>支付</li>
 </ul>
 <p>还有其他一些可选功能，如初始化、悬浮球、登出等等。每个渠道登录的用户数据是不互通的，也就说用户数据是在渠道后台数据库的。<strong>每个功能理论上来讲都需要注册接口回调的</strong>。</p>
-<h3 id="注册"><a href="#注册" class="headerlink" title="注册"></a>注册</h3><p>每个渠道都有自己后台的用户数据，通过 渠道 SDK 后台注册账号，该账号可绑定一个或多个游戏（也就意味着，一个账号可以自由绑定多个游戏角色号）账号的 ID，不过这个游戏账号 ID 本身也是渠道后台生成的，不要跟用户 ID 混淆。</p>
+<h1 id="注册"><a href="#注册" class="headerlink" title="注册"></a>注册</h1><p>每个渠道都有自己后台的用户数据，通过 渠道 SDK 后台注册账号，该账号可绑定一个或多个游戏（也就意味着，一个账号可以自由绑定多个游戏角色号）账号的 ID，不过这个游戏账号 ID 本身也是渠道后台生成的，不要跟用户 ID 混淆。</p>
 <p>非常简单，单纯请求自己后台接口。</p>
-<h3 id="登录"><a href="#登录" class="headerlink" title="登录"></a>登录</h3><p>其实这里的登录有两个层，渠道和CP 都需要各自登录成功。这里插一句，登录之前基本都需要 CP 通知 SDK 初始化，如带一些必要接口验证必要参数， 屏幕方向，Context 上下文引用等，以备 SDK 自身检查渠道包参数是否合法，是否更新，是否弹窗，闪屏公告等等。下面我详细列出 SDK 的登录流程。</p>
+<h1 id="登录"><a href="#登录" class="headerlink" title="登录"></a>登录</h1><p>其实这里的登录有两个层，渠道和CP 都需要各自登录成功。</p>
+<p>这里插一句，登录之前基本都需要 CP 通知 SDK 初始化，如带一些必要接口验证必要参数， 屏幕方向，Context 上下文引用等，以备 SDK 自身检查渠道包参数是否合法，是否更新，是否弹窗，闪屏公告等等。</p>
+<p>下面我详细列出 SDK 的登录流程。</p>
 <ol>
 <li>CP 客户端 调用 SDK 登录接口，并注册登录回调</li>
 <li>SDK 发起登录请求，拿到 Session</li>
@@ -421,11 +424,11 @@
 <li>登录完成（通常也要告知聚合一些玩家的游戏信息，如角色名，所在服，以便支付验证）</li>
 </ol>
 <p>以上就是完整的登录流程了。</p>
-<h3 id="支付"><a href="#支付" class="headerlink" title="支付"></a>支付</h3><p>支付是整个 SDK 最复杂的地方了，这里的画个图说明下吧。整个流程涉及到： 客户端， CP 服务端， 聚合服务端，SDK 客户端， SDK 服务端。</p>
+<h1 id="支付"><a href="#支付" class="headerlink" title="支付"></a>支付</h1><p>支付是整个 SDK 最复杂的地方了，这里的画个图说明下吧。整个流程涉及到： 客户端， CP 服务端， 聚合服务端，SDK 客户端， SDK 服务端。</p>
 <p><img src="http://p9iqqot9p.bkt.clouddn.com/android%E6%B8%B8%E6%88%8Fsdk%E6%94%AF%E4%BB%98%E6%B5%81%E7%A8%8B.png" alt="http://p9iqqot9p.bkt.clouddn.com/android%E6%B8%B8%E6%88%8Fsdk%E6%94%AF%E4%BB%98%E6%B5%81%E7%A8%8B.png"></p>
 <p>看完这个图大家应该清晰很多，主要流程应该都讲完了。 我一直相信一个人的力量是有限的，如果大家觉得有什么不对地方，可以公众号跟我留言指出，共同成长。</p>
 <p>本来想写个 Demo 放在 GitHub 上， 但感觉上面流程基本上讲的很详细了，就作废了。大家如果需求强烈的话，我后面会考虑写个 Demo 。另外，这个流程可能会被刷接口请求，出现坏账，不知道大家看出来了没，不过基本上满足需求了。以后可能会出个 支付流程优化版本吧。</p>
-<h2 id="关于作者"><a href="#关于作者" class="headerlink" title="关于作者"></a>关于作者</h2><p>如果文章对你有帮助，赞赏是最大的支持和鼓励。<br>这是我的个人博客 <a href="http://crizquan.top" target="_blank" rel="noopener">http://crizquan.top</a><br><img src="http://p9iqqot9p.bkt.clouddn.com/wechatoa.jpg" alt="我的个人公众号"></p>
+<h1 id="关于作者"><a href="#关于作者" class="headerlink" title="关于作者"></a>关于作者</h1><p>如果文章对你有帮助，赞赏是最大的支持和鼓励。<br>这是我的个人博客 <a href="http://crizquan.top" target="_blank" rel="noopener">http://crizquan.top</a><br><img src="http://p9iqqot9p.bkt.clouddn.com/wechatoa.jpg" alt="我的个人公众号"></p>
 
       
     </div>
@@ -656,7 +659,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Android-游戏渠道-SDK-简介"><span class="nav-number">2.</span> <span class="nav-text">Android 游戏渠道 SDK 简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#渠道-SDK-开发"><span class="nav-number">3.</span> <span class="nav-text">渠道 SDK 开发</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#注册"><span class="nav-number">3.1.</span> <span class="nav-text">注册</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#登录"><span class="nav-number">3.2.</span> <span class="nav-text">登录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#支付"><span class="nav-number">3.3.</span> <span class="nav-text">支付</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于作者"><span class="nav-number">4.</span> <span class="nav-text">关于作者</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Android-游戏渠道-SDK-简介"><span class="nav-number">2.</span> <span class="nav-text">Android 游戏渠道 SDK 简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#渠道-SDK-开发"><span class="nav-number">3.</span> <span class="nav-text">渠道 SDK 开发</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#注册"><span class="nav-number">4.</span> <span class="nav-text">注册</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#登录"><span class="nav-number">5.</span> <span class="nav-text">登录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#支付"><span class="nav-number">6.</span> <span class="nav-text">支付</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关于作者"><span class="nav-number">7.</span> <span class="nav-text">关于作者</span></a></li></ol></div>
             
 
           </div>
